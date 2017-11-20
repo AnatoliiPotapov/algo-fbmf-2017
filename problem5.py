@@ -101,7 +101,6 @@ def single_pattern_rabin_karp(ref, reed, seq_type):
 def multiple_pattern_rabin_karp(ref, reeds, seq_type):
     pass
 
-
 parser = argparse.ArgumentParser(description='Finding all occurrences of reeds \
 from .fasta file in reference sequence (protein or dna).')
 parser.add_argument('--type', type=str, help='type of sequences')
