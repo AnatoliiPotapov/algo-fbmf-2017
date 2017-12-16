@@ -51,14 +51,61 @@ def prefix_trick(matrix):
 
     return max_sum, [(max_left, max_up),(max_right, max_down)]
 
-def preprrocessing():
-    pass
+
+def prepro(A):
+    p_array = np.zeros((4,A.shape[0],A.shape[1]))
+    p_array[0,0,:] = A[0,:]
+    p_array[1,:,A.shape[1]-1] = A[:,A.shape[1]-1]
+    p_array[2,A.shape[0]-1,:] = A[A.shape[0]-1,:]
+    p_array[3,:,A.shape[1]-1] = A[:,A.shape[1]-1]
+    for i in range(1,A.shape[0]):
+            p_array[0,i,:] = p_array[0,i-1,:]+A[i,:]
+    for j in range(1,A.shape[1]):
+            p_array[0,:,j] = p_array[0,:,j-1]+p_array[0,:,j]
+    for j in range(A.shape[1]-1,0,-1):
+            p_array[1,:,j-1] = p_array[1,:,j]+A[:,j-1]
+    for i in range(1,A.shape[0]):
+            p_array[1,i,:] = p_array[1,i-1,:]+p_array[1,i,:]
+    for i in range(A.shape[0]-1,0,-1):
+        p_array[2,i-1,:] = p_array[2,i,:]+A[i-1,:]
+    for j in range(1,A.shape[1]):
+            p_array[2,:,j] = p_array[2,:,j-1]+p_array[2,:,j]
+    for j in range(A.shape[1]-1,0,-1):
+            p_array[3,:,j-1] = p_array[3,:,j]+A[:,j-1]
+    for i in range(A.shape[0]-1,0,-1):
+            p_array[3,i-1,:] = p_array[3,i-1,:]+p_array[3,i,:]
+    return p_array
+
+class Prepro():
+    def __init__(self,A):
+        self.p_array = prepro(A)
+        self.sum = np.sum(A)
+
+    def get_area(self,t1,t2,a,b):
+        area = 0.0
+        x1,y1 = t1
+        x2,y2 = t2
+        if x1>0 and y2<b:
+            area += self.p_array[0,x1-1,y2]
+        if x2<a and y2<b:
+            area += self.p_array[1,x2,y2]
+        if x1>0 and y1>0:
+            area += self.p_array[2,x1-1,y1-1]
+        if x2<a and y1>0:
+            area += self.p_array[3,x2,y1-1]
+        area = self.sum - area
+        return area
+
+a = Prepro(A)
+a.get_area((0,0),(2,2),3,3)
 
 def get_sum():
     pass
 
 def dummy_solution():
     pass
+
+
 
 def print_array(arr, max_ind):
     for i in range(arr.shape[0]):
