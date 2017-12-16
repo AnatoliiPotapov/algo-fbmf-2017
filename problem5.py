@@ -8,7 +8,11 @@
  откуда с наибольшей вероятностью могло быть получено каждое конкретное
  короткое прочтение. Обычно является первой стадией в обработке данных в случае,
  если известен геном исследуемого организма.
+
+Решение:
+Алгоритм Рабина-Карпа для поиска всех вхождений каждого рида.
 """
+
 import sys, argparse
 from Bio.SeqIO.FastaIO import SimpleFastaParser
 import argparse
@@ -30,10 +34,10 @@ class FastaSeq:
             self.alphabet = alphabet_amino
 
     def __str__(self):
-        return ">"+self.name+"\n"+self.seq+"\n"
+        return '>'+self.name+'\n'+self.seq+'\n'
 
     def __repr__(self):
-        return ">"+self.name+"\n"+self.seq+"\n"
+        return '>'+self.name+'\n'+self.seq+'\n'
 
     def compare(self, seq):
         return compare(self.alphabet, self, seq)
@@ -77,7 +81,7 @@ class RollingHashBio:
 
 
 def single_pattern_rabin_karp(ref, reed, seq_type):
-    if ref== "" or reed == "":
+    if ref== '' or reed == '':
         return None
     if len(reed) > len(ref):
         return None
@@ -101,7 +105,6 @@ def single_pattern_rabin_karp(ref, reed, seq_type):
 def multiple_pattern_rabin_karp(ref, reeds, seq_type):
     pass
 
-
 parser = argparse.ArgumentParser(description='Finding all occurrences of reeds \
 from .fasta file in reference sequence (protein or dna).')
 parser.add_argument('--type', type=str, help='type of sequences')
@@ -115,5 +118,7 @@ with open(args.file) as handle:
         sequences.append(FastaSeq(args.type, values[0], values[1]))
 
 test_reference = args.ref
-reed = sequences[0].seq
-print(single_pattern_rabin_karp(test_reference, reed, 'dna'))
+
+for sequence in sequences:
+    reed = sequence.seq
+    print("Поиск паттерна {0}, вхождения: {1}".format(reed, single_pattern_rabin_karp(test_reference, reed, args.type)))
