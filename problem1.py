@@ -1,3 +1,12 @@
+"""
+Задача 1
+
+Сортировка входящего fasta-файла по лексикографическому порядку с помощью кучи.
+
+Решение:
+Читаем риды и сортируем кучей, собственно :)
+"""
+
 import sys, argparse
 from Bio.SeqIO.FastaIO import SimpleFastaParser
 import argparse
